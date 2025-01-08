@@ -22,7 +22,10 @@ const WeatherMap = () => {
         [24.396308, -125.0], // Bottom Left
         [49.384358, -66.93457] // Top Right
     ]);
-    const [center] = useState([37.5, -95]); // Center of the USA
+    
+    // Set the initial center to Palo Alto coordinates
+    const [center] = useState([37.4419, -122.1430]); // Palo Alto coordinates
+    const [zoom] = useState(12); // Set an appropriate zoom level for Palo Alto
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -58,7 +61,7 @@ const WeatherMap = () => {
             {loading && <p>Loading radar data...</p>}
             {error && <p className="error-message">{error}</p>}
 
-            <MapContainer center={center} zoom={4} style={{ height: '75vh', width: '85vw' }}>
+            <MapContainer center={center} zoom={zoom} style={{ height: '75vh', width: '85vw' }}>
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
