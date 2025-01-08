@@ -30,7 +30,7 @@ const WeatherMap = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(`http://localhost:5001/api/radar/image?country=USA`);
+            const response = await fetch(`https://weatherradar-9.onrender.com/api/radar/image?country=USA`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }

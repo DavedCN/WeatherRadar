@@ -82,5 +82,5 @@ function valueToColor(value) {
 
 // Start the server
 app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Server running at https://weatherradar-9.onrender.com:${PORT}`);
 });
