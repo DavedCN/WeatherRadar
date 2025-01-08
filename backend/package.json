@@ -17,9 +17,10 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "grib2": "^1.0.2",
     "grib2-simple": "^1.1.1",
     "grib2json": "^1.0.2",
     "pako": "^2.1.0"
   },
-  "description": ""
+  "description": "Full-Stack Weather Radar Display App"
 }
