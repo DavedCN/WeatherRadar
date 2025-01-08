@@ -1,8 +1,46 @@
+import express from 'express';
+import axios from 'axios';
 import { createCanvas } from 'canvas';
 import pako from 'pako';
-import grib2 from 'grib2'; // Import the grib2 library
+import cors from 'cors';
 
+const app = express();
+const PORT = process.env.PORT || 5001;
+
+// Enable CORS
+app.use(cors());
+
+const MRMS_URL = "https://mrms.ncep.noaa.gov/2D/ReflectivityAtLowestAltitude/MRMS_ReflectivityAtLowestAltitude.latest.grib2.gz";
+
+app.get('/api/radar/image', async (req, res) => {
+    console.log('Received request for radar image');
+    
+    try {
+        // Fetch the latest GRIB2 file
+        const response = await axios.get(MRMS_URL, { responseType: 'arraybuffer' });
+        console.log('Fetched GRIB2 data successfully');
+
+        // Decompress the GRIB2 file
+        const decompressedData = pako.inflate(response.data);
+        console.log('Decompressed GRIB2 data successfully');
+
+        // Generate radar image directly from decompressed data
+        const radarImageUrl = generateRadarImageFromGRIB(decompressedData);
+        
+        if (!radarImageUrl) {
+            return res.status(404).send('Radar image not found');
+        }
+
+        res.json({ image_url: radarImageUrl });
+    } catch (error) {
+        console.error('Error processing radar image:', error.message); 
+        res.status(500).send('An error occurred while processing radar image.');
+    }
+});
+
+// Function to generate an image from raw GRIB2 data
 function generateRadarImageFromGRIB(decompressedData) {
+    // Assuming decompressedData is in a format that can be processed directly
     const width = 800;  // Set appropriate width
     const height = 600; // Set appropriate height
 
@@ -10,15 +48,10 @@ function generateRadarImageFromGRIB(decompressedData) {
     const ctx = canvas.getContext('2d');
     const imageData = ctx.createImageData(width, height);
 
-    // Parse the decompressed GRIB2 data
-    const messages = grib2.decode(decompressedData); // Decode the GRIB2 data
-
-    // Assuming we are interested in the first message for reflectivity values
-    const reflectivityValues = messages[0].data; // This should contain the reflectivity values
-
+    // Here you would convert decompressedData into radar values
+    // For demonstration, filling with dummy data
     for (let i = 0; i < width * height; i++) {
-        // Ensure we do not exceed the bounds of the reflectivityValues array
-        const value = (i < reflectivityValues.length) ? reflectivityValues[i] : -1; // Use -1 for no data
+        const value = Math.random() * 100; // Replace with actual radar values
         const color = valueToColor(value);
 
         imageData.data[i * 4] = color[0];     // R
@@ -45,3 +78,9 @@ function valueToColor(value) {
     else if (value < 70) return [128, 0, 128]; // Purple for extreme reflectivity
     else return [255, 20, 147];                // Deep pink for maximum reflectivity
 }
+
+
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+});
