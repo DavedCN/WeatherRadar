@@ -1,0 +1,25 @@
+{
+  "name": "backend",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@weacast/grib2json": "^2.2.0",
+    "axios": "^1.7.9",
+    "canvas": "^3.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "grib2-simple": "^1.1.1",
+    "grib2json": "^1.0.2",
+    "pako": "^2.1.0"
+  },
+  "description": ""
+}
